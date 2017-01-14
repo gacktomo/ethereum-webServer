@@ -1,17 +1,22 @@
 pragma solidity ^0.4.0;
-contract register {
-  struct domainData{
+contract webServer {
+  struct pageData{
     address owner;
-    bool used;
+    bytes32 data;
   }
-  mapping ( uint => domainData) public domainList;
-  event RegisterEvent(address owner, uint domain);
+  pageData firstPage;
 
-  function registerName(uint domain) returns(bool sufficient) {
-    if (domainList[domain].used==true) return false;
-    domainList[domain].owner = msg.sender;
-    domainList[domain].used = true;
-    RegisterEvent(msg.sender, domain);
-    return true;
+  //mapping ( uint => pageData) public pageList;
+  event RegisterEvent(address owner, bytes32 data);
+
+  function webServer(bytes32 data) {
+    //if (domainList[domain].used==true) return false;
+    firstPage.owner = msg.sender;
+    firstPage.data = data;
+    RegisterEvent(msg.sender, data);
+  }
+
+  function get() constant returns (bytes32 data){
+    return firstPage.data;
   }
 }
