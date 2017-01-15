@@ -8,11 +8,16 @@ contract webServer {
   mapping(bytes32 => pageData) public pages;
   //event RegisterEvent(address owner, string data);
 
-  function set(string name, string data) {
-    //if (domainList[domain].used==true) return false;
+  function set(string name, string data) returns (bool result){
     var name32 = stringToBytes32(name);
+    if (pages[name32].owner != 0) {
+        if (pages[name32].owner != msg.sender) {
+            return false;
+        }
+    }
     pages[name32].owner = msg.sender;
     pages[name32].data = data;
+    return true;
     //RegisterEvent(msg.sender, data);
   }
 
