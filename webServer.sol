@@ -8,29 +8,19 @@ contract webServer {
   mapping(bytes32 => mapping(bytes32 => pageData)) public pages;
   //event RegisterEvent(address owner, string data);
 
-  function set(string domain, string name, string data) returns (bool result){
-    var name32 = stringToBytes32(name);
-    var domain32 = stringToBytes32(domain);
-    if (pages[domain32][name32].owner != 0) {
-        if (pages[domain32][name32].owner != msg.sender) {
+  function set(bytes32 domain, bytes32 name, string data) returns (bool result){
+    if (pages[domain][name].owner != 0) {
+        if (pages[domain][name].owner != msg.sender) {
             return false;
         }
     }
-    pages[domain32][name32].owner = msg.sender;
-    pages[domain32][name32].data = data;
+    pages[domain][name].owner = msg.sender;
+    pages[domain][name].data = data;
     return true;
     //RegisterEvent(msg.sender, data);
   }
 
-  function get(string domain, string name) constant returns (string data){
-    var name32 = stringToBytes32(name);
-    var domain32 = stringToBytes32(domain);
-    return pages[domain32][name32].data;
-  }
-
-  function stringToBytes32(string memory source) returns (bytes32 result) {
-    assembly {
-        result := mload(add(source, 32))
-    }
+  function get(bytes32 domain, bytes32 name) constant returns (string data){
+    return pages[domain][name].data;
   }
 }
