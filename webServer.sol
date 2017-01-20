@@ -2,13 +2,13 @@ pragma solidity ^0.4.0;
 contract webServer {
   struct pageData{
     address owner;
-    bytes[] data;
+    bytes32[] data;
   }
 
   mapping(bytes32 => mapping(bytes32 => pageData)) public pages;
-  event RegisterEvent(address owner, bytes data);
+  event RegisterEvent(address owner, bytes32 data);
 
-  function set(bytes32 domain, bytes32 name, bytes data) returns (bool result){
+  function set(bytes32 domain, bytes32 name, bytes32 data) returns (bool result){
     if (pages[domain][name].owner != 0) {
         if (pages[domain][name].owner != msg.sender) {
             return false;
@@ -21,8 +21,8 @@ contract webServer {
     return true;
   }
 
-  function get(bytes32 domain, bytes32 name, uint index) returns (bytes data){
-    return pages[domain][name].data[index];
+  function get(bytes32 domain, bytes32 name) constant returns (bytes32[] data){
+    return pages[domain][name].data;
   }
 
   function getlen(bytes32 domain, bytes32 name) constant returns (uint leng){
